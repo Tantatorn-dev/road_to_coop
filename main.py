@@ -1,5 +1,6 @@
 # Road to Coop : Path to Greatness
-import  datetime
+import datetime
+
 
 def read_data(filepath):
     f = open("award.txt", "r")
@@ -24,14 +25,39 @@ def read_data(filepath):
     return awards
 
 
-def print_all_awards(awards):
+def print_awards(awards):
     print("{:<8} {:<15} {:<10} {:<10} {:<10}".format('date', 'award_name', 'rank', 'first_name', 'last_name'))
     for award in awards:
         print("{:<8} {:<15} {:<10} {:<10} {:<10}".format(award['date'].strftime("%x"), award['award_name'], award['rank'], award['first_name'], award['last_name']))
 
+
 def print_by_year(awards, year):
-    pass
+
+    temp = []
+    for award in awards:
+        if award["date"].strftime("%Y") == year:
+            temp.append(award)
+
+    print_awards(temp)
+
+
+def print_from_year_to_year(awards, start_year, end_year):
+
+    temp = []
+    for award in awards:
+        current_year = int(award['date'].strftime("%Y"))
+        if current_year>=start_year and current_year<=end_year:
+            temp.append(award)
+
+    temp = sort_by_date(temp)
+    print_awards(temp)
+
+
+def sort_by_date(awards):
+    awards = sorted(awards, key=lambda k: k['date'], reverse=False)
+    return awards
+
 
 if __name__ == '__main__':
     awards = read_data("award.txt")
-    print_all_awards(awards)
+    print_from_year_to_year(awards, 2015, 2018)
