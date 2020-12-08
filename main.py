@@ -9,6 +9,10 @@ def read_data(filepath):
 
     lines = f.readlines()
     for line in lines:
+
+        if line == "":
+            break
+
         line = line.split()
         award = {}
 
@@ -22,7 +26,29 @@ def read_data(filepath):
 
         awards.append(award)
 
+    f.close()
+
     return awards
+
+
+def write_data(filepath, awards):
+    f = open(filepath, "w")
+
+    newtext = ""
+
+    for award in awards:
+        date = award["date"].strftime("%Y-%m-%d")
+        award_name = award["award_name"]
+        rank = award["rank"]
+        first_name = award["first_name"]
+        last_name = award["last_name"]
+        line = "{} {} {} {} {}".format(date, award_name, rank, first_name, last_name)
+
+        newtext =  newtext + line + "\n"
+
+    f.write(newtext)
+
+    f.close()
 
 
 def print_awards(awards):
@@ -58,6 +84,19 @@ def sort_by_date(awards):
     return awards
 
 
+def add_award(awards, date, award_name, rank, first_name, last_name):
+
+    award = {}
+    award["date"] = datetime.datetime.strptime(date, "%Y-%m-%d")
+    award["award_name"] = award_name
+    award["rank"] = rank
+    award["first_name"] = first_name
+    award["last_name"] = last_name
+
+    awards.append(award)
+
+
 if __name__ == '__main__':
     awards = read_data("award.txt")
-    print_from_year_to_year(awards, 2015, 2018)
+    add_award(awards, "2017-12-08", "MOTO", "1", "Moto", "Rola")
+    write_data("award.txt", awards)
